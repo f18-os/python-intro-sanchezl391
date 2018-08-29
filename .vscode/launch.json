@@ -25,8 +25,8 @@
             "type": "python",
             "request": "launch",
             "program": "${file}",
-            "console": "integratedTerminal",
-            "args":["declaration.txt", "output.txt", "declarationKey.txt"]
+            "console": "integratedTerminal"
+            // "args":["declaration.txt", "output.txt", "declarationKey.txt"]
         },
         {
             "name": "Python: Terminal (external)",
