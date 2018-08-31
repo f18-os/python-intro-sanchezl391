@@ -1,6 +1,6 @@
 # Python Word Counter - What you need to know
 
-## Commands
+## Running The Program
 
 1. Clone repo
 2. Run Program
