@@ -4,9 +4,9 @@
 
 1. Clone repo
 2. Run Program
-  a. ```python wordCount.py declaration.txt output.txt```
+  :. ```python wordCount.py declaration.txt output.txt```
 3. Test Program
-  a. ```python wordCountTest.py declaration.txt output.txt declarationKey.txt```
+  :. ```python wordCountTest.py declaration.txt output.txt declarationKey.txt```
 
 ## Extra Info
 
