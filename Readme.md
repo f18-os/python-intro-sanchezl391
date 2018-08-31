@@ -1,3 +1,20 @@
+# Python Word Counter - What you need to know
+
+## Commands
+
+1. Clone repo
+2. Run Program
+  a. ```python wordCount.py declaration.txt output.txt```
+3. Test Program
+  a. ```python wordCountTest.py declaration.txt output.txt declarationKey.txt```
+
+## Extra Info
+
+Python version: 3.6.4
+
+
+## Provided ReadMe
+
 This repository contains the code for the python introduction lab. The
 purpose is to have a fairly simple python assignment that introduces
 the basic features and tools of python
