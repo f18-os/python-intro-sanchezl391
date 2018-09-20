@@ -11,6 +11,7 @@ def execute_cmd(cmd):
             os.execve(program, cmd, os.environ) # try to exec command
         except OSError:             # ...expected
             pass
+
 # Handles creating a pipe, setting up file descriptors, 
 #   reading and writing to/from pipe, and executing commands
 def handle_pipe():
@@ -48,17 +49,20 @@ while True:
     # Create SubProcess to emulate shell
     parentProcessId = os.fork() 
 
-    execute_cmd(["export", "PS1", "=" , ""])
+    # execute_cmd(["export", "PS1", "=" , ""])
 
     if parentProcessId == 0: # Child Shell
         os.write(1, "\n$ ".encode())
         user_input = input().split() 
 
         hasPipe = "|" in user_input
+        hasAmpersand = "&" in user_input
 
-        if(hasPipe):
+        if hasPipe:
             handle_pipe()
-                
+        elif hasAmpersand:
+
+            p = subprocess.call(' '.join(user_input),shell=True)
         else: # No pipe
             if(user_input[0] == "cd"):
                 os.chdir(user_input[1])
@@ -69,6 +73,3 @@ while True:
         sys.exit(1)
     else: # Parent Shell
         os.wait()
-
-
-
