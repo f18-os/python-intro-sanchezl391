@@ -7,8 +7,9 @@
 ```Ctrl-C```
 
 ## Supported Commands
-- cd 
-- ls
-- | (Pipe, tested with the command ```$ ls | head -1```)
+- ```cd ```
+- ```ls```
+- ```|``` (Pipe, tested with the command ```$ ls | head -1```)
+- ```&``` (Background tasks, tested with the command ```$ find /etc -print &```)
 
 

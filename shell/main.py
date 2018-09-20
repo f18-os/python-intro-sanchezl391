@@ -61,7 +61,8 @@ while True:
         if hasPipe:
             handle_pipe()
         elif hasAmpersand:
-
+            # & is a shell feature. Using execve did not find the & command
+            # subprocess allows us to run a command in the background using a shell
             p = subprocess.call(' '.join(user_input),shell=True)
         else: # No pipe
             if(user_input[0] == "cd"):
