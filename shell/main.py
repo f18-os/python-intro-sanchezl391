@@ -3,19 +3,20 @@
 import os, re, sys
 import subprocess
 
+# Executes a list of commands
 def execute_cmd(cmd):
     for dir in re.split(":", os.environ['PATH']): # try each directory in path
         program = "%s/%s" % (dir, cmd[0])
         try:
-            # subprocess.call(["ls > random.txt"])
             os.execve(program, cmd, os.environ) # try to exec command
-            # os.close(sys.stdout)
         except OSError:             # ...expected
             pass
-            # print("Error")  
+# Handles creating a pipe, setting up file descriptors, 
+#   reading and writing to/from pipe, and executing commands
 def handle_pipe():
     pipeIndex = user_input.index('|') # Has Pipe          
 
+    # Split Commands into two sections
     firstCmd = user_input[0 : pipeIndex]
     secondCmd = user_input[pipeIndex + 1: len(user_input)]
 
@@ -30,46 +31,44 @@ def handle_pipe():
         os.close(w)
         execute_cmd(secondCmd)
         os.close(1)
+    elif(parentProcessId < 0):
+        print("fork failed, returning %d\n" % parentProcessId, file=sys.stderr)
+        sys.exit(1)
     else: # set up child writing to pipe
         os.close(r)
         os.dup2(w, 1)
         execute_cmd(firstCmd)
         os.close(w) # done writing data
 
-def handle_right_redirection():
-    redirectIndex  = user_input.index('>')
-
-    firstCmd = user_input[0 : redirectIndex]
-    secondCmd = user_input[redirectIndex + 1: len(user_input)]
-
-    
-
-
-# Create SubProcess to emulate shell
-parentProcessId = os.fork() 
-
 import fileinput
 
+# Loop to emulate shell
+# Creates a process on each iteration
+while True:
+    # Create SubProcess to emulate shell
+    parentProcessId = os.fork() 
 
-if parentProcessId == 0: # Child Shell
-    os.write(1, "\nEnter a command: ".encode())
-    user_input = input().split() 
+    execute_cmd(["export", "PS1", "=" , ""])
 
-    hasPipe = "|" in user_input
-    hasRedirection = ">" in user_input
+    if parentProcessId == 0: # Child Shell
+        os.write(1, "\n$ ".encode())
+        user_input = input().split() 
 
+        hasPipe = "|" in user_input
 
-    if(hasPipe):
-        handle_pipe()
-    elif(hasRedirection):
-        handle_right_redirection
-            
-    else: # No pipe, redirection
-        if(user_input[0] == "cd"):
-            os.chdir(user_input[1])
-        else:
-            execute_cmd(user_input)
-else: # Parent Shell
-    os.wait()
+        if(hasPipe):
+            handle_pipe()
+                
+        else: # No pipe
+            if(user_input[0] == "cd"):
+                os.chdir(user_input[1])
+            else:
+                execute_cmd(user_input)
+    elif parentProcessId < 0:
+        print("fork failed, returning %d\n" % parentProcessId, file=sys.stderr)
+        sys.exit(1)
+    else: # Parent Shell
+        os.wait()
+
 
 
